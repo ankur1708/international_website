@@ -1,0 +1,189 @@
+<div data-overlay ng-show="forgotPasswd || sendPasswd">&nbsp;</div>
+<!--// Content -->
+<div class="container-fluid nopadding">
+  <div class="container">
+    <!--// login Flow Start -->
+    <div class="loginProcessContainer container-fluid">
+      <div role="loginFlow" class="col-xs-12 nopadding">
+        <div class="circleBox LoginIcon">
+          <span>
+            <i class="sprite sprite-user-maroon-bg"></i>
+          </span>
+          <span class="rougeColor">Login</span>
+        </div>
+        <div class="Progressliner Firstliner" ng-class="{'rougeBack': currentView() !== 'Login', 'white-nine': currentView() === 'Login'}"></div>
+        <div class="circleBox ShippingIcon ">
+          <span>
+            <i class="sprite" ng-class="{'sprite-carrier-grey-bg': currentView() === 'Login', 'sprite-carrier-maroon-bg': currentView() !== 'Login'}"></i>
+          </span>
+          <span ng-class="{'rougeColor': currentView() !== 'Login', 'warm-greyColor': currentView() === 'Login'}">Shipping</span>
+        </div>
+        <div class="Progressliner Secoundliner" ng-class="{'rougeBack': currentView() === 'Payment', 'white-nine': currentView() !== 'Payment'}"></div>
+        <div class="circleBox PaymentIcon ">
+          <span>
+            <i class="sprite" ng-class="{'sprite-rupee-grey-bg': currentView() !== 'Payment', 'sprite-rupee-maroon-bg': currentView() === 'Payment'}"></i>
+          </span>
+          <span ng-class="{'rougeColor': currentView() === 'Payment', 'warm-greyColor': currentView() !== 'Payment'}">Payment</span>
+        </div>
+      </div>
+    </div>
+    <!--// login Flow End -->
+  </div>
+</div>
+<div class="container-fluid nopadding visible-xs">
+<div class="col-xs-12 col-sm-6 socialMediaContainer" ng-hide="guestUser">
+  <div class="row">
+    <div class="col-xs-6 nopadding socialMedia padding-right-xs-0">
+      <a class="signup-fb" href="javascript:void(0)" ng-click="authenticate('facebook')" ng-if="!IE.isTheBrowser">
+        <small><img src="images/facebook_alt.png" width="8" height="17" alt="" title=""></small>
+        <span class="cart-s-m">Log In with Facebook</span>
+        <div ng-show="fbLoader" cv-loader class="small-loader" style="position: absolute;left: 50%;top: 35%;"></div>
+      </a>
+    </div>
+    <div class="col-xs-6 nopadding socialMedia padding-left-xs-0">
+      <a class="signup-g" href="javascript:void(0)" ng-click="authenticate('google')" ng-if="!IE.isTheBrowser">
+        <small><img src="images/googlw_Plus.png" width="26" height="16" alt="" title=""></small>
+        <span class="cart-s-m">Log In with Google</span>
+        <div ng-show="gLoader" cv-loader class="small-loader" style="position: absolute;left: 50%;top: 35%;"></div>
+      </a>
+    </div>
+    <div class="col-xs-12 guest" ng-hide="guestUser">
+      <h4>CONTINUE AS A GUEST</h4>
+      <div class="BtnContainer col-xs-12 nopadding"><input class="btn guestBtn" type="submit" ng-click="changeGuest()" value="GUEST CHECKOUT"></div>
+    </div>
+
+  </div>
+</div>
+</div>
+<div class="container-fluid nopadding">
+<div class="container m-padding">
+  <!--// login Container Start -->
+  <div class="col-xs-12 loginContainer">
+    <div class="col-xs-12 col-sm-6 " ng-class="{ 'signinForm' : !guestUser }">
+      <div class="col-xs-12 col-sm-10" ng-class="{ 'nopadding' : guestUser }">
+        <div class="mobile-seperator visible-xs" ng-hide="guestUser">
+          <span class="Mseperator">OR</span>
+        </div>
+        <h4 class="guest-checkout" ng-show="guestUser">GUEST CHECKOUT</h4>
+        <h4 class="guest-checkout" ng-hide="guestUser">HAVE AN ACCOUNT? SIGN IN</h4>
+        <div class="existingUser" ng-hide="guestUser">
+          <form name="userLoginForm" ng-submit=" loginCred()" novalidate>
+            <fieldset class="form-group" ng-class="{ 'error' : (userLoginForm.email.$invalid && !userLoginForm.email.$pristine && userLoginForm.email.$touched) || (userLoginForm.$submitted && userLoginForm.email.$error.required)}">
+              <label>Email</label>
+              <input type="email" name="email" class="form-control" placeholder="Enter email address" ng-model="userLogin.email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required id="loginEmail">
+
+              <span ng-message="userLoginForm.email.$invalid && !userLoginForm.email.$pristine" ng-show="userLoginForm.email.$invalid && userLoginForm.email.$touched" class="error">
+                Please enter valid email address.</span>
+
+              <div ng-show="userLoginForm.$submitted && userLoginForm.email.$pristine" ng-if="!(userLoginForm.email.$invalid && userLoginForm.email.$touched)">
+                <span ng-show="userLoginForm.email.$error.required" class="error">Please enter your email</span>
+              </div >
+            </fieldset>
+            <fieldset class="form-group " ng-class="{'error': (userLoginForm.password.$invalid && !userLoginForm.password.$pristine && userLoginForm.password.$touched) || (userLoginForm.$submitted && userLoginForm.password.$error.required)}">
+              <label>Password</label>
+              <input type="password" name="password" class="form-control" placeholder="Enter password" ng-minlength="6" ng-model="userLogin.password" required id="loginPassword">
+              <span ng-message="userLoginForm.password.$invalid && !userLoginForm.password.$pristine " ng-show="userLoginForm.password.$invalid && userLoginForm.password.$touched" class="error">
+                Please enter valid password.</span>
+
+              <div ng-show="userLoginForm.$submitted && userLoginForm.password.$pristine" ng-if="!(userLoginForm.password.$invalid && userLoginForm.password.$touched)">
+                <span ng-show="userLoginForm.password.$error.required" class="error">Please enter your password</span>
+              </div >
+            </fieldset>
+            <div class="alert alert-warning rougeColor" ng-show="invalidCred">Invalid email ID or Password!</div>
+            <fieldset class="form-group" id="forgotPasswordLink">
+              <a role="ForgotPassword" href="javascript:void(0)" ng-click="forgotPwd()">Forgot password?</a>
+            </fieldset>
+            <div class="BtnContainer col-xs-12 nopadding">
+              <button class="btn newBtn" type="submit" id="loginBtn">
+                <span ng-show="!loginLoader">LOGIN</span>
+                <div ng-show="loginLoader" cv-loader class="small-loader"></div>
+              </button>
+            </div>
+          </form>
+          <div class="container-fluid ForgotPasswordContainer" ng-show="forgotPasswd">
+            <div class="FPcontainer">
+              <span role="close" ng-show="forgotPasswd">
+                <a href="javascript:void(0)" ng-click="forgtPwdClose()"><img src="images/delete-icon.png" alt="" title=""></a>
+              </span>
+              <h3>FORGOT PASSWORD?</h3>
+              <p>Enter your email below and we’ll send you a new password by email.</p>
+              <form name="sendPasswordForm" ng-submit="sendPassword()" novalidate>
+                <fieldset
+                  class="form-group"
+                  ng-class="{ 'error' : (sendPasswordForm.forgotEmail.$invalid && !sendPasswordForm.forgotEmail.$pristine && sendPasswordForm.forgotEmail.$touched)  || (sendPasswordForm.$submitted && sendPasswordForm.forgotEmail.$error.required)  }">
+                  <input type="email" name="forgotEmail" class="form-control" placeholder="Enter email address" ng-model="userForgot.forgotEmail" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required id="forgotPassEmail">
+                  <span ng-message="sendPasswordForm.forgotEmail.$invalid && !sendPasswordForm.forgotEmail.$pristine" ng-show="sendPasswordForm.forgotEmail.$invalid && sendPasswordForm.forgotEmail.$touched" class="error">Please enter valid Email ID.</span>
+                  <div ng-show="sendPasswordForm.$submitted">
+                    <span ng-show="sendPasswordForm.forgotEmail.$error.required" class="error">Please enter your email.</span>
+                  </div>
+                  <button type="submit" class="btn sendBtn">SEND PASSWORD
+                  </button>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+          <div class="container-fluid ForgotPasswordContainer" ng-show="sendPasswd">
+            <div class="SPcontainer">
+              <span role="close" ng-show="sendPasswd" ng-click="sendPwdClose()">
+                <a><img src="images/delete-icon.png" alt="" title=""></a>
+              </span>
+              <h3>PASSWORD SENT</h3>
+              <p>Password has been sent to your email address.</p>
+            </div>
+          </div>
+        </div>
+        <div class="guestUser col-xs-12 nopadding" ng-show="guestUser">
+          <form name="guestUserForm" ng-submit="changeGuestCheckout()" novalidate>
+            <fieldset class="form-group" ng-class="{ 'error' : (guestUserForm.guestEmail.$invalid && !guestUserForm.guestEmail.$pristine && guestUserForm.guestEmail.$touched) || (guestUserForm.$submitted && guestUserForm.guestEmail.$error.required) }">
+              <label class="font16">Email</label>
+              <input type="email" name="guestEmail" class="form-control height45 border-radius2 guest-m-b-t" placeholder="Enter email address" ng-model="guest.guestUserEmail" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required id="guestUserEmail">
+              <div ng-show="guestUserForm.guestEmail.$invalid">
+                <span ng-show="!guestUserForm.$submitted && !guestUserForm.guestEmail.$pristine" class="error">Please enter a valid email address</span>
+                <span ng-show="guestUserForm.$submitted && guestUserForm.guestEmail.$pristine" class="error">Please enter a valid email address</span>
+                <span ng-show="guestUserForm.$submitted && !guestUserForm.guestEmail.$pristine" class="error">Please enter a valid email address</span>
+              </div>
+            </fieldset>
+            <div class="BtnContainer col-xs-12 nopadding">
+              <button type="submit" class="btn newBtn" id="guestCheckoutBtn">
+                <span ng-show="!guestCheckoutLoader">GUEST CHECKOUT</span>
+                <div ng-show="guestCheckoutLoader" cv-loader class="small-loader"></div>
+              </button>
+            </div>
+            <p>Have an account?
+              <span>
+                <a role="ForgotPassword" href="javascript:void(0)" ng-click="loginHere()">Login Here</a>
+              </span>
+            </p>
+          </form>
+        </div>
+      </div>
+      <span class="seperator hidden-xs" ng-hide="guestUser">OR</span>
+    </div>
+    <div class="col-xs-12 col-sm-6 socialMediaContainer hidden-xs" ng-hide="guestUser">
+      <div class="col-xs-12 col-sm-10 pull-right">
+        <div class="col-xs-12 nopadding socialMedia">
+          <a class="signup-fb" href="javascript:void(0)" ng-click="authenticate('facebook')" ng-if="!IE.isTheBrowser">
+            <small><img src="images/facebook_alt.png" width="8" height="17" alt="" title=""></small>
+            <span class="cart-s-m">Log In with Facebook</span>
+            <div ng-show="fbLoader" cv-loader class="small-loader" style="position: absolute;left: 50%;top: 35%;"></div>
+          </a>
+          <a class="signup-g" href="javascript:void(0)" ng-click="authenticate('google')" ng-if="!IE.isTheBrowser">
+            <small><img src="images/googlw_Plus.png" width="26" height="16" alt="" title=""></small>
+            <span class="cart-s-m">Log In with Google</span>
+            <div ng-show="gLoader" cv-loader class="small-loader" style="position: absolute;left: 50%;top: 35%;"></div>
+          </a>
+          <div class="col-xs-12 nopadding guest">
+            <h4>CHECKOUT AS A GUEST</h4>
+            <p>New to craftsvilla? Use our quick and secure method.</p>
+            <div class="BtnContainer col-xs-12 nopadding" ng-hide="guestUser">
+              <button class="btn guestBtn" ng-click="changeGuest()" id="continueAsGuestBtn">CONTINUE AS GUEST</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--// login Container End -->
+</div>
+</div>
+<!--// Content -->

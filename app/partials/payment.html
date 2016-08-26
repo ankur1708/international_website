@@ -1,0 +1,291 @@
+<!--// Content -->
+<div class="container-fluid nopadding" ng-if="!isAndroid">
+  <div class="container">
+    <!--// login Flow Start -->
+    <div class="loginProcessContainer container-fluid">
+      <div role="loginFlow" class="col-xs-12 nopadding">
+        <div class="circleBox LoginIcon">
+          <span>
+            <i class="sprite sprite-user-maroon-bg"></i>
+          </span>
+          <span class="rougeColor">Login</span>
+        </div>
+        <div class="Progressliner Firstliner" ng-class="{'rougeBack': currentView() !== 'Login', 'white-nine': currentView() === 'Login'}"></div>
+        <div class="circleBox ShippingIcon ">
+          <span>
+            <i class="sprite" ng-class="{'sprite-carrier-grey-bg': currentView() === 'Login', 'sprite-carrier-maroon-bg': currentView() !== 'Login'}"></i>
+          </span>
+          <span ng-class="{'rougeColor': currentView() !== 'Login', 'warm-greyColor': currentView() === 'Login'}">Shipping</span>
+        </div>
+        <div class="Progressliner Secoundliner" ng-class="{'rougeBack': currentView() === 'Payment', 'white-nine': currentView() !== 'Payment'}"></div>
+        <div class="circleBox PaymentIcon ">
+          <span>
+            <i class="sprite" ng-class="{'sprite-rupee-grey-bg': currentView() !== 'Payment', 'sprite-rupee-maroon-bg': currentView() === 'Payment'}"></i>
+          </span>
+          <span ng-class="{'rougeColor': currentView() === 'Payment', 'warm-greyColor': currentView() !== 'Payment'}">Payment</span>
+        </div>
+      </div>
+    </div>
+    <!--// login Flow End -->
+  </div>
+</div>
+<div class="container-fluid nopadding">
+  <div class="container nopadding">
+    <!--// -->
+    <div class="row paymentContainer">
+      <div class="col-xs-12">
+        <div class="alert alert-danger payment-error-msg text-center" ng-bind="getPaymentError()" ng-if="paymentErrorCode && shippingAmountData"></div>
+      </div>
+      <div class="col-xs-12 hidden-xs ">
+        <h4 role="headding">CHOOSE PAYMENT METHOD</h4>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4 pull-right item-details m-padding-lr-15px" ng-if="finalQuoteData">
+        <div class="row youpay visible-xs">
+          <div class="col-xs-12 nopadding">
+            <div role="items" class="col-xs-12 ">
+              <div class="col-xs-8 nopadding">
+                <h5>
+                  You Pay
+                  <span ng-if="!isAndroid">
+                    <a href="javascript:void(0)" ng-click="toggleDetails()" ng-show="!flags.showDetails">View Details</a>
+                    <a href="javascript:void(0)" ng-click="toggleDetails()" ng-show="flags.showDetails">Hide Details</a>
+                  </span>
+                </h5>
+              </div>
+              <div class="col-xs-4 nopadding text-right">
+                <span class="total-amount" ng-show="!flags.waitingCartDatails">
+                  <span class="" ng-bind-html="Currency(orderCurrency)"></span>
+                  {{shippingAdressData.grand_total | number: 0}}
+                </span>
+                <div ng-show="flags.waitingCartDatails"><div cv-text-loader class="textloading"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 nopadding r-bg" ng-if="!isAndroid">
+          <div role="items" class="col-xs-12 hidden-xs">
+            <div class="col-xs-8 nopadding">
+              <h5>{{shippingAmountData.total_items}}
+                ITEMS
+                <span>
+                  <a href="javascript:void(0)" ng-click="toggleDetails()" ng-show="!flags.showDetails">View Details</a>
+                  <a href="javascript:void(0)" ng-click="toggleDetails()" ng-show="flags.showDetails">Hide Details</a>
+                </span>
+              </h5>
+            </div>
+            <div class="col-xs-4 nopadding text-right">
+              <div ng-show="flags.waitingCartDatails"><div cv-text-loader class="textloading"></div></div>
+              <span class="total-amount" ng-show="!flags.waitingCartDatails">
+                <span class="" ng-bind-html="Currency(orderCurrency)"></span>
+                {{shippingAdressData.grand_total | number: 0}}
+              </span>
+            </div>
+          </div>
+          <!--// -->
+          <div class="col-xs-12 item-container" ng-show="flags.showDetails">
+            <div class="col-xs-12 items-list" ng-repeat="quotedata in finalQuoteData" ng-show="flags.showDetails">
+              <div class="media">
+                <span role="close" ng-click="removeFromCart(quotedata.product_id, quotedata)">
+                  <a>
+                    <i class="sprite sprite-grey-cross"></i>
+                  </a>
+                </span>
+                <div class="media-left">
+                  <a href="{{PRODUCTURL + quotedata.product_id}}" target="_self">
+                    <img class="media-object" ng-src="{{IMGHOST + '/thumb/166x166' + quotedata.product_image}}" alt="" width="100px" height="100px" title="">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <h4 class="media-heading">{{quotedata.product_name}}</h4>
+                  <div class="paddint-tp-btm-5">
+                    <span class="meta-label">Qty</span>
+                    <span class="meta-value">
+                      {{quotedata.product_qty}}</span>
+                    <!--span ng-if="quotedata.variant" class="pipe">|</span-->
+                    <span ng-if="quotedata.variant && !isEmpty(quotedata.variant)" class="pipe">|</span>
+                    <span ng-if="quotedata.variant" ng-bind-html="getProductMetaData(quotedata.variant, { 'key': 'Size', 'name': 'Size'}, { 'key': 'Color', 'name': 'Color'} )"></span>
+                  </div>
+
+                  <h4 class="items-price">
+                    <span class="currency-code-summary" ng-bind-html="Currency(orderCurrency)"></span>
+                    {{quotedata.product_price | number: 0}}
+                  </h4>
+                </div>
+                <div class="overlay-out-stock" ng-show="quotedata.waitingCartItem">
+                  <div cv-loader class="loader-cartitem"></div>
+                </div>
+              </div>
+            </div>
+            <!--// Shipping Details -->
+            <div class="col-xs-12 items-list" ng-show="flags.showDetails">
+              <div class="col-xs-12 nopadding shipping-details">
+                <h5>SHIPPING DETAILS</h5>
+                <p class="wrap">
+                  <span>{{shippingAdressData.firstname + ' ' + shippingAdressData.lastname}}</span>
+                  <span class="normal">{{shippingAdressData.street +','+shippingAdressData.city +','+ shippingAdressData.region +','+ shippingAdressData.postcode}}</span>
+                  <span class="normal">{{shippingAdressData.telephone}}</span>
+                  <p>{{shippingAdressData.country}}</p>
+                </p>
+              </div>
+            </div>
+            <!--// Shipping End -->
+            <div payment-summary-box ng-if="!isDesktop() && flags.showDetails"></div>
+          </div>
+          <div payment-summary-box ng-if="isDesktop() || flags.showDetails" class="hidden-xs"></div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-8 tab-content-mobile new-payment-method">
+        <div class="col-xs-12 hidden-lg nopadding">
+          <h4 role="headding">CHOOSE PAYMENT METHOD</h4>
+        </div>
+        <div class="col-xs-12  box-border">
+          <div class="nopadding payment-list col-xs-12">
+            <!-- required for floating -->
+            <!-- Nav tabs -->
+            <ul data-payment-mobile class="nav nav-tabs tabs-left col-xs-12 col-sm-3 nopadding">
+              <li ng-repeat="item in paymentMethods" ng-class="{ active: changeName == '{{item.method}}', grey: (changeName == 'Cash On Delivery' && shippingAmountData.showCod == 0) }">
+                <a href="javascript:void(0)" data-toggle="tab" ng-click="changeSlide(item)" ng-class="{'paypal-img': item.method === 'PayPal'}">
+                  <span ng-if="item.method !== 'PayPal'">{{ item.method }}</span>
+                </a>
+                <div class="col-xs-12 hidden-lg" style="height:{{getHeight()}}px;"></div>
+              </li>
+            </ul>
+            <div class="tab-content col-xs-12 col-sm-9" style="top:{{getTop()}}px;" id="payment-tab-content">
+              <div
+                payment-method-one
+                mode="'Cash On Delivery'"
+                codavailable="shippingAmountData.showCod == 1"
+                currency="orderCurrency"
+                amount="shippingAmountData.grand_total.value"
+                ng-if="changeName.toLowerCase() === 'cash on delivery' && shippingAmountData"
+                class="tab-pane active"
+                loader="placeOrderLoader"
+                onorderplaced="placeOrder()"
+                isdesktop="isDesktop"></div>
+              <div
+                payment-method-one
+                mode="'PayU Money'"
+                currency="orderCurrency"
+                amount="shippingAmountData.grand_total.value"
+                ng-if="changeName.toLowerCase() === 'payu money'"
+                class="tab-pane active" loader="placeOrderLoader"
+                onorderplaced="placeOrder()"
+                isdesktop="isDesktop"></div>
+              <div
+                payment-method-one
+                mode="'PayPal'"
+                currency="shippingAmountData.grand_total.int_currency_code"
+                amount="shippingAmountData.grand_total.int_value"
+                ng-if="changeName.toLowerCase() === 'paypal'"
+                class="tab-pane active"
+                loader="placeOrderLoader"
+                onorderplaced="placeOrder()"
+                isdesktop="isDesktop"></div>
+              <div
+                payment-method-two
+                mode="'Credit Card'"
+                currency="orderCurrency"
+                cardobj="cards.credit"
+                formname="forms.creditForm"
+                amount="shippingAmountData.grand_total.value"
+                ng-if="changeName.toLowerCase() === 'credit card'"
+                class="tab-pane active"
+                onorderplaced="placeOrder()"
+                loader="placeOrderLoader"
+                cardtypes="cardTypes"></div>
+              <div
+                payment-method-two
+                mode="'Debit Card'"
+                currency="orderCurrency"
+                cardobj="cards.debit"
+                formname="forms.debitForm"
+                amount="shippingAmountData.grand_total.value"
+                ng-if="changeName.toLowerCase() === 'debit card'"
+                class="tab-pane active"
+                onorderplaced="placeOrder()"
+                loader="placeOrderLoader"
+                cardtypes="cardTypes"></div>
+              <div
+                payment-method-three
+                mode="'Net Banking'"
+                currency="orderCurrency"
+                banklist="banklist"
+                formname="forms.nbForm"
+                amount="shippingAmountData.grand_total.value"
+                ng-if="changeName.toLowerCase() === 'net banking'"
+                class="tab-pane active"
+                onorderplaced="placeOrder()"
+                loader="placeOrderLoader"
+                xmodel="nb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-xs-12 nopadding spacer">&nbsp;</div>
+<!--// -->
+<div class="col-xs-12 nopadding payments-facilities text-center">
+  <div class="row visible-xs" style="width: 100%; margin: 0;">
+    <div class="col-xs-12 nopadding">
+      <div class="col-xs-12 nopadding buyerProtection visible-xs">
+        <a href="#">
+          <span>
+            <i class="sprite sprite-buyer-protection vertical-middle"></i>
+          </span>
+          <strong>100%</strong>
+          Buyer Protection
+        </a>
+      </div>
+    </div>
+  </div>
+  <ul>
+    <li>
+      <i class="sprite sprite-verified-visa"></i>
+    </li>
+    <li>
+      <i class="sprite sprite-master-card"></i>
+    </li>
+    <li>
+      <i class="sprite sprite-pci"></i>
+    </li>
+  </ul>
+</div>
+<!--// -->
+<div id="confirmModal" class="modal" role="dialog" ng-if="modal.confirm.active" style="display:block;">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="modal.confirm.callback(false)">&times;</button>
+        <h4 class="modal-title">Important</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{modal.confirm.content}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="modal.confirm.callback(true)">Ok</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="modal.confirm.callback(false)">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="alertModal" class="modal" role="dialog" ng-if="modal.alert.active" style="display:block;">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="modal.alert.callback()">&times;</button>
+        <h4 class="modal-title">Important</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{modal.alert.content}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="modal.alert.callback()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

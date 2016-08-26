@@ -1,0 +1,6 @@
+{
+  'js': ['js/dist/core.min.js', 'js/dist/cart.min.js',],
+  'css': ['css/main.min.css'],
+  'images': ['images/sprites.png'],
+  'html': ['partials/checkout-cart.html']
+}

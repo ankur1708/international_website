@@ -1,0 +1,590 @@
+<div role-header class="container-fluid nopadding">
+  <div class="navbar navbar-default navbar-fixed-top craftsvilla-navbar" role="navigation">
+    <div class="container">
+      <!-- role-nav -->
+      <div id="cart-page-content">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle pull-left mobile-navbar" data-toggle="offcanvas" data-target=".sidebar-offcanvas"></button>
+          <div class="without-searchbar">
+            <a class="navbar-brand logo-container" rel="home" ng-href="{{NSHOST}}/" target="_self">
+              <i class="sprite sprite-cv-logo"></i>
+              <!--  width="170" height="28" -->
+            </a>
+            <div class="mobile-top visible-sm visible-xs pull-right" click-out="hideAccountDrop()">
+              <i class="icon-v2 icon-small icon-search-v2 header-mobile-icon"></i>
+              <a ng-href="{{NSHOST}}/wishlist/" target="_self">
+                <i class="sprite sprite-wishlist header-mobile-icon"></i>
+              </a>
+              <a class="cart-icon-section" rel="nofollow" ng-href="/buy/cart" ng-click="dataLayer.push({'event':'WentToCartEvent','eventName':'WentToCart','source':'TopNavigation','count':'{{items}}'});">
+                <span class="icon-container">
+                  <i class="sprite sprite-cart header-mobile-icon"></i>
+                  <span class="cart-count-container">
+                    <span class="mnotification">
+                      {{getCartDetailsVal.product_list.length}}
+                    </span>
+                  </span>
+                </span>
+              </a>
+              <a rel="nofollow" href="javascript:void(0)" ui-sref="login" class="user-icon-section" ng-if="!isLoggedIn">
+                <i class="sprite sprite-user loggedin-icon header-mobile-icon"></i>
+              </a>
+              <a rel="nofollow" href="javascript:void(0)" ng-click="showAccountDrop()" class="user-icon-section" ng-if="isLoggedIn">
+                <i class="sprite sprite-user loggedin-icon header-mobile-icon"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-custom" role="menu" aria-labelledby="dropdownMenu" ng-click="hideAccountDrop()" ng-if="showAccountDropdown" style="display:block;">
+                <li></li>
+                <li>
+                  <a ng-href="{{NSHOST}}/sales/order/history/#open">
+                    <b>My Orders</b>
+                  </a>
+                </li>
+                <li>
+                  <a ng-href="{{NSHOST}}/customer/address/">
+                    <b>Address Book</b>
+                  </a>
+                </li>
+                <li>
+                  <a ng-href="{{NSHOST}}/customer/account/bankdetails/">
+                    <b>Bank Details</b>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a ng-href="{{NSHOST}}/wishlist/">
+                    <b>Wishlist</b>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a ng-href="{{NSHOST}}/customer/account/">
+                    <b>Settings</b>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a ng-href="{{NSHOST}}/customer/account/logout">
+                    <b>Logout</b>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="with-searchbar">
+            <div class="back-arrow-container">
+              <i class="icon-v2 icon-small icon-back-arrow"></i>
+            </div>
+            <form class="col-xs-9" id="msearch_mini_form" action="{{searchEndPoint}}" method="get">
+              <input type="hidden" name="searchby" id="searchby" value="product">
+              <input class="typeahead sb-search-input" placeholder="Search..." type="text" name="q" id="msearchval" ng-model="searchText" ng-change="loadAutoComplete(searchText)">
+              <button type="submit" class="btn btn-default col-md-2 text-uppercase sb-search-submit" onclick="dataLayer.push({'event':'SearchPerformedEvent','eventName':'SearchPerformed','source':'homeScreen','suggestionUsed':'no'});">
+                <i class="icon-v2 icon-small icon-search-v2"></i>
+              </button>
+              <div class="custom_results_text custom_results">
+                <div class="result_text" ng-if="autoCompleteData.length == 0">No Items Found</div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse nopadding">
+          <div class="col-md-7 autosuggest-section">
+            <form id="search_mini_form" role="search" action="{{searchEndPoint}}" method="get">
+              <input type="hidden" name="searchby" id="searchby" value="product">
+              <div class="form-group col-md-10 text-holder">
+                <span class="twitter-typeahead" style="position: relative; display: inline-block; direction: ltr;">
+                  <input
+                    type="text"
+                    class="typeahead form-control tt-hint"
+                    readonly=""
+                    autocomplete="off"
+                    spellcheck="false"
+                    tabindex="-1"
+                    style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; opacity: 1; background: none 0% 0% / auto repeat scroll padding-box border-box rgb(255, 255, 255);"><input
+                    type="text"
+                    name="q"
+                    class="typeahead form-control tt-input"
+                    id="searchval"
+                    placeholder="Eg: Salwar Suit, Lehnga, Kurtis"
+                    autocomplete="off"
+                    spellcheck="false"
+                    dir="auto"
+                    style="position: relative; vertical-align: top; background-color: transparent;"
+                    ng-model="searchText"
+                    ng-change="loadAutoComplete(searchText)">
+                  <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: block; right: auto;" ng-show="searchText.length > 0">
+                    <div class="tt-dataset-1">
+                      <span class="tt-suggestions" style="display: block;">
+                        <div class="tt-suggestion" ng-if="!autoCompleteData || autoCompleteData.length == 0">
+                          <div class="custom_results_text custom_results" style="white-space: normal;">
+                            No Items Found
+                          </div>
+                        </div>
+                        <div class="tt-suggestion" ng-repeat="result in autoCompleteData" ng-if="autoCompleteData.length > 0">
+                          <div class="custom_results_text custom_results" style="white-space: normal;" ng-if="result.type=='category'" xng-href="{{HOST + '/' + result.content.url_path + '/'}}">
+                            <div class="result_text" ng-bind-html="result.content.text | highlight:searchText"></div>
+                            <div class="result_type" ng-bind-html="result.type | highlight:searchText"></div>
+                          </div>
+                          <div class="custom_results_image custom_results" style="white-space: normal;" ng-if="result.type=='product'" xng-href="{{HOST + '/catalog/product/view/id/' + result.content.entity_id + '/s/'+ result.content.url_path + '/'}}">
+                            <div class="result_image hidden-xs hidden-sm" ng-style="'background-image':'url(' + IMGHOST + '/thumb/166x166' + result.content.images + ')''"></div>
+                            <div class="result_text" ng-bind-html="result.content.text | highlight:searchText"></div>
+                            <div class="result_text hidden-xs hidden-sm">by
+                              <span ng-bind-html="result.content.vendor_name | highlight:searchText"></span>
+                            </div>
+                            <div class="result_text hidden-xs hidden-sm">
+                              <span class="discount_price">Rs.
+                                {{result.content.discounted_price | number: 0}}</span>
+                            </div>
+                            <div class="result_type visible-xs visible-sm" id="product_type">
+                              {{result.type}}
+                            </div>
+                          </div>
+                        </div>
+                      </span>
+                    </div>
+                  </span>
+                </span>
+              </div>
+              <button type="submit" class="btn btn-default col-md-2 text-uppercase search-button" onclick="dataLayer.push({'event':'SearchPerformedEvent','eventName':'SearchPerformed','source':'homeScreen','suggestionUsed':'no'});">Search</button>
+            </form>
+          </div>
+
+          <ul class="nav navbar-nav col-md-3 right-section pull-right">
+            <a class="col-md-2 wishlist" ng-href="{{NSHOST}}/wishlist/">
+              <i class="sprite sprite-wishlist"></i>
+            </a>
+            <a class="cart-icon-container header-icon-container" rel="nofollow" ng-href="/buy/cart" ng-click="dataLayer.push({'event':'WentToCartEvent','eventName':'WentToCart','source':'TopNavigation','count':'{{items}}'});">
+              <li class="col-md-4 cart-container">
+                <span class="cart-icon">
+                  <i class="sprite sprite-cart"></i>
+                </span>
+                <span class="cart-text">
+                  Cart
+                </span>
+                <span class="notification">
+                  {{getCartDetailsVal.product_list.length}}
+                </span>
+              </li>
+            </a>
+            <li id="loginLogoutResponse" class="col-md-4">
+              <a class="user-icon-container header-icon-container" ui-sref="login" ng-if="!isLoggedIn">
+              <li class="account-section" ng-if="!isLoggedIn">
+                <span class="user-icon">
+                  <i class="sprite sprite-user"></i>
+                </span>
+                <span class="user-text">
+                  Sign In
+                </span>
+              </li>
+            </a>
+            <li class="account-section loggedin-section" ng-if="isLoggedIn" ng-class="{'open': showAccountDropdown}">
+              <a href="javascript:void(0)" class="dropdown-toggle user-icon-container header-icon-container" ng-click="showAccountDrop()" click-out="hideAccountDrop()">
+                <span class="user-icon">
+                  <i class="sprite sprite-user loggedin-icon"></i>
+                </span>
+                <span class="user-text">Account</span>
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu dropdown-custom" role="menu" aria-labelledby="dropdownMenu" ng-click="hideAccountDrop()">
+                <li></li>
+                <li>
+                  <a ng-href="{{NSHOST}}/sales/order/history/#open">
+                    <b>My Orders</b>
+                  </a>
+                </li>
+                <li>
+                  <a ng-href="{{NSHOST}}/customer/address/">
+                    <b>Address Book</b>
+                  </a>
+                </li>
+                <li>
+                  <a ng-href="{{NSHOST}}/customer/account/bankdetails/">
+                    <b>Bank Details</b>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a ng-href="{{NSHOST}}/wishlist/">
+                    <b>Wishlist</b>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a ng-href="{{NSHOST}}/customer/account/">
+                    <b>Settings</b>
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a ng-href="{{NSHOST}}/customer/account/logout">
+                    <b>Logout</b>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+  </div>
+</div>
+</div>
+<!-- /.container-fluid -->
+
+<a class="col-xs-12 buyer_protection_mobile visible-sm visible-xs" id="buyer_protection_mobile" ng-click="showLearnMoreModal()">
+<i class="sprite sprite-buyer-protection vertical-middle"></i>
+<span class="protection_text">
+  <b>100%
+  </b>Buyer Protection</span>
+<span class="learn_more">Learn More</span>
+</a>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog" ng-class="{'active': learnMoreModal}">
+  <div class="modal-dialog" click-out="hideLearnMoreModal()">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header no-border custom-modal-header">
+        <div class="policies-close" ng-click="hideLearnMoreModal()">X</div>
+      </div>
+      <div class="modal-body pad10px pad0-15">
+        <div>
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs policies-nav" role="tablist" ng-init="policyTab=1">
+            <li role="presentation" ng-class="{'active': policyTab===1}" ng-click="policyTab=1">
+              <a href="" aria-controls="shippingPolicies" role="tab" data-toggle="tab">Shipping Policies</a>
+            </li>
+            <li role="presentation" ng-class="{'active': policyTab===2}" ng-click="policyTab=2">
+              <a href="" aria-controls="returnPolicies" role="tab" data-toggle="tab">Return Policies</a>
+            </li>
+            <li role="presentation" ng-class="{'active': policyTab===3}" ng-click="policyTab=3">
+              <a href="" aria-controls="securePayments" role="tab" data-toggle="tab">100% Secure Payments</a>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content policies-tab-conent">
+            <div role="tabpanel" class="tab-pane active" ng-show="policyTab===1">
+              <div class="mart5">
+                <b>Shipping Time</b>
+              </div>
+
+              <p>We deliver in India within 10 days and outside of India within 21 days. Currently our average delivery time in India is around 4 days and outside of India is 18 days</p>
+
+              <div class="mart5">
+                <b>Shipment Tracking:</b>
+              </div>
+
+              <p>You will get an email and SMS with the tracking details as soon as the product is shipped. You can also request the seller for a faster shipping by clicking the ‘Contact Seller’ button on the product page after you place the order</p>
+
+              <div class="mart5">
+                <b>Shipping Locations:</b>
+              </div>
+
+              <p>We deliver to over 100 countries globally including USA, UK, Australia and Canada
+              </p>
+            </div>
+            <div role="tabpanel" class="active tab-pane" ng-show="policyTab===2">
+              <div class="mart5">
+                <b>Return Time:</b>
+              </div>
+              <p>We have a 100% Buyer protection policy wherein you can return the product for any reason whatsoever. You can ship it back to us within 14 days and get a full refund
+              </p>
+              <div class="mart5">
+                <b>Return Process:
+                </b>
+              </div>
+              <p>Just email us your complaint with order number within 7 days of receipt of the product. You can also login to your account and raise a dispute from there. Our team will reply to you with an approval email containing the instructions and return
+                shipping address to which you need to send back the product within 7 days.
+              </p>
+              <div class="mart5">
+                <b>Refund:
+                </b>
+              </div>
+              <p>If you wish, we can offer you a redeemable voucher worth the refund amount for future purchases. Else we can also refund the entire amount back to your bank account without any deductions along with Rs. 100 for return shipping.</p>
+            </div>
+            <div role="tabpanel" class="active tab-pane" ng-show="policyTab===3">
+              <div class="mart5">
+                <b>Payment Modes:</b>
+              </div>
+              <?php if(!$is_international) { ?>
+              <p>Cash on Delivery</p>
+              <?php } ?>
+              <p>Net Banking, Debit cards/ Credit Cards (Visa, MasterCard, American Express, Diners Club cards accepted) International Credit Cards
+              </p>
+              <div class="mart5">
+                <b>Payment Details:
+                </b>
+              </div>
+              <p>You will receive an email with your payment details immediately after you make a purchase. In case of any issues our customer care would be happy to help you
+              </p>
+              <div class="mart5">
+                <b>Payment Security:</b>
+              </div>
+              <p>You transparently pay through our Payment Gateway and all the data is transferred through high level encryption technology. We guarantee you, your payments are 100% secured with us and your payment details are never shared with anyone during the
+                payment process
+              </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="row-fluid ng-scope">
+<div class="container product_container  cart-pad-lr5-xs">
+<div class="col-xs-12  col-md-12 buyer-section hidden-sm hidden-xs" ng-click="showLearnMoreModal()">
+  <i class="sprite sprite-buyer-protection vertical-middle"></i>
+  <span class="buyer-text">
+    <b>100%</b>
+    <span class="buyer-regular-text regular-text">Buyer Protection</span>
+    |
+    <span class="secure-text regular-text">Secure Payments &amp; Easy Returns |
+      <span class="learn-text regular-text">Learn More</span>
+    </span>
+  </span>
+</div>
+</div>
+</div>
+<div class="row-fluid">
+  <div class="container product_container  cart-pad-lr5-xs">
+    <div class="col-xs-12 nopadding" check-out="">
+      <div class="header">
+        my cart |
+        {{ getCartDetailsVal.product_list.length }}
+        item(s)
+      </div>
+      <!-- checkout header ends -->
+
+      <div class="col-xs-12 check-out-msg" ng-if="flags.isOutOfStockProducts">
+        <div class="check-out-msg-txt">Some itmes in your cart are
+          <strong>'out of stock'</strong>
+        </div>
+        <a href="javascript:void(0)" class="check-out-msg-btn" ng-click="removeAllProducts('outofstock')">Remove</a>
+      </div>
+      <div class="col-xs-12 check-out-msg" ng-if="flags.isInStockNotCod">
+        <div class="check-out-msg-txt-lrg">Few Items in your cart are not available for
+          <strong>CASH ON DELIVERY.</strong>
+          You can still proceed and do Online Payment.</div>
+      </div>
+
+      <div class="col-xs-12 check-out-msg" ng-if="flags.itemRemoved">
+        <div class="check-out-msg-txt">
+          Item removed from your cart</div>
+        <div class="check-out-msg-btn" ng-click="addToCart()">undo</div>
+      </div>
+      <div empt-cart="" ng-if="isCartEmpty()">
+        <div class="empty-head">YOUR CART IS EMPTY</div>
+        <div class="empty-txt">Start shopping with options below.</div>
+        <div class="empty-lst">
+          <ul>
+            <li>
+              <a target="_self" ng-href="{{NSHOST}}/womens-clothing/sarees">Sarees</a>
+            </li>
+            <li>
+              <a target="_self" ng-href="{{NSHOST}}/womens-clothing/salwar-suits">Salwar Suits</a>
+            </li>
+            <li>
+              <a target="_self" ng-href="{{NSHOST}}/womens-clothing/lehangas">Bridal Lehenga</a>
+            </li>
+            <li>
+              <a target="_self" ng-href="{{NSHOST}}/jewellery">Jewellery</a>
+            </li>
+          </ul>
+        </div>
+        <div class="contn-shpng" ng-click="continueShopping()">CONTINUE SHOPPING</div>
+      </div>
+      <div class="col-xs-12 nopadding left-panel" ng-if="!isCartEmpty()">
+        <div
+          class="cart-items-card t-m-10 out-of-stock-items"
+          ng-if="!product.IsInStock"
+          ng-repeat="product in getCartDetailsVal.product_list"
+          cv-cart-product currency="currencyCode"
+          product="product"
+          imghost="IMGHOST"
+          ng-disabled="true"
+          ng-init="flags.isOutOfStockProducts=true"
+          style="pointer-events: none;"></div>
+        <div
+          class="cart-items-card t-m-10"
+          ng-if="product.IsInStock && product.cod_available"
+          ng-repeat="product in getCartDetailsVal.product_list"
+          cv-cart-product currency="currencyCode"
+          product="product"
+          imghost="IMGHOST"
+          onquantityupdated="updateQuantity(quantity, product_id, data)"
+          onitemremoved="removeProductFromCart(product_id, data)"
+          onnoteadded="addNoteToSeller(index, product_id, comment, data)"
+          onnoteremoved="removeNoteToSeller(product)"
+          onnoteupdated="updateNoteToSeller(data, data.seller_note)"></div>
+
+        <div class="col-xs-8 nopadding red " ng-if="flags.isInStockNotCod">Items without cash on delivery</div>
+        <div class="col-xs-4 nopadding pull-right text-right">
+          <a href="javascript:void(0)" ng-if="flags.isInStockNotCod" class="nopadding clrrouge " ng-class="flags.isInStockNotCod ? '':'col-xs-12'" ng-click="removeAllProducts('noncod')">Remove All</a>
+        </div>
+        <div
+          class="cart-items-card t-m-10"
+          ng-if="product.IsInStock && !product.cod_available"
+          ng-repeat="product in getCartDetailsVal.product_list"
+          cv-cart-product currency="currencyCode"
+          product="product"
+          imghost="IMGHOST"
+          onquantityupdated="updateQuantity(quantity, product_id, data)"
+          onitemremoved="removeProductFromCart(product_id, data)"
+          ng-init="flags.isInStockNotCod=true"
+          onnoteadded="addNoteToSeller(index, product_id, comment, data)"
+          onnoteremoved="removeNoteToSeller(product)"
+          onnoteupdated="updateNoteToSeller(data, data.seller_note)"></div>
+
+        <!-- cart-items-card ends -->
+
+        <div class="col-xs-12 nopadding hidden-xs" ng-if="!isCartEmpty()">
+          <div class="c-continue-shpng button" ng-click="continueShopping()">
+            <i class='sprite sprite-left-arrow vertical-middle'></i>
+            Continue Shopping
+          </div>
+          <div class="order-total">
+            <div class="pull-left inln-blck">Total Payable(
+              {{ getCartDetailsVal.product_list.length }}
+              Item(s))</div>
+            <div class="o-t-amt pull-right inln-blck">
+              <div class="pull-right inln-blck">
+                {{ grandTotal | number: 0}}</div>
+              <span class="currency-code" ng-bind-html="Currency(currencyCode)"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- checkout left panel ends -->
+      <!--coupon code proceed to checkout starts here-->
+      <div class="col-xs-12 nopadding right-panel" ng-if="!isCartEmpty()">
+        <div class="col-xs-12 coupon-cont">
+          <div class="coupon-text" ng-show="flags.successCoupon">Coupon
+            <span class="colorblack">
+              <strong>"{{couponCode}}"</strong>
+            </span>
+            applied
+            <!--<span class="clrrouge">Remove</span>-->
+            <a href="javascript:void(0)" ng-click="removeCoupon(couponCode)">
+              <span class="clrrouge">Remove</span>
+            </a>
+          </div>
+
+          <div ng-hide="flags.successCoupon">
+            <div ng-hide="flags.successCoupon || flags.couponCodeHeader" class="coupon-code-header">Have a Coupon Code?
+              <a ng-click="showCouponCont()">
+                <span class="clrrouge">
+                  <strong>Apply Here</strong>
+                </span>
+              </a>
+            </div>
+            <div ng-show="flags.successCouponDetails">
+              <div class="cc-header">Enter Coupon Code</div>
+              <div class="col-xs-12 nopadding">
+                <form class="coupon-cont-form" name="couponForm" ng-submit="applyCoupon()" novalidate>
+                  <div>
+                    <input
+                      type="text"
+                      class="col-xs-8 coupon-input"
+                      name="couponcode"
+                      ng-model="coupon.couponcode"
+                      ng-class="{ 'red-border' : (couponForm.couponcode.$invalid && !couponForm.couponcode.$pristine) || (couponForm.$submitted && couponForm.couponcode.$error.required) }"
+                      required
+                      id="couponCodeTextBox">
+                  </div>
+                  <button type="submit" class="col-xs-4 coupon-c-button" id="couponCodeApplyButton">
+                    <span ng-show="!flags.couponWait">APPLY</span>
+                    <div ng-show="flags.couponWait" cv-loader class="small-loader"></div>
+                  </button>
+                  <div ng-show="couponForm.$submitted || couponForm.$invalid" class="col-xs-12">
+                    <span class="red">{{couponMessage}}</span>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 order-cont" ng-if="!isCartEmpty()">
+          <div class="o-heading">order summary</div>
+          <!-- order summary new change -->
+          <div>
+            <div class="o-left-cont">
+              <p>Sub Total</p>
+            </div>
+            <div class="o-right-cont">
+              <div class="ord-amt" ng-show="!flags.waitingCartDatails">
+                <!--svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 14 28" class="icon">
+                <path d="M14.031 7.344v1.594q0 0.219-0.141 0.359t-0.359 0.141h-2.625q-0.359 2.25-2.016 3.656t-4.312 1.719q2.609 2.781 7.172 8.375 0.219 0.25 0.063 0.531-0.125 0.281-0.453 0.281h-3.047q-0.25 0-0.391-0.187-4.781-5.734-7.781-8.922-0.141-0.141-0.141-0.344v-1.984q0-0.203 0.148-0.352t0.352-0.148h1.75q2.063 0 3.32-0.672t1.602-1.953h-6.672q-0.219 0-0.359-0.141t-0.141-0.359v-1.594q0-0.219 0.141-0.359t0.359-0.141h6.453q-0.891-1.766-4.188-1.766h-2.266q-0.203 0-0.352-0.148t-0.148-0.352v-2.078q0-0.219 0.141-0.359t0.359-0.141h13q0.219 0 0.359 0.141t0.141 0.359v1.594q0 0.219-0.141 0.359t-0.359 0.141h-3.641q0.734 0.953 1 2.25h2.672q0.219 0 0.359 0.141t0.141 0.359z"></path>
+            </svg-->
+                <span class="currency-code-summary" ng-bind-html="Currency(currencyCode)"></span>
+                <div class="pull-right">{{ subTotal | number: 0 }}</div>
+              </div>
+              <div class="ord-amt" ng-show="flags.waitingCartDatails"><div cv-text-loader class="textloading"></div></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="o-left-cont">
+              <p ng-show="flags.successCoupon">Coupon Applied ({{couponCode}})</p>
+              <p class="green" ng-show="flags.successCoupon">You saved
+                {{discount | number: 0}}%</p>
+            </div>
+            <div class="o-right-cont">
+              <div class="ord-amt" ng-show="flags.successCoupon && !flags.waitingCartDatails">
+                <span class="pull-left">
+                  &#45;
+                </span>
+                <span class="currency-code-summary" ng-bind-html="Currency(currencyCode)"></span>
+                <!--svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 14 28" class="icon">
+            <path d="M14.031 7.344v1.594q0 0.219-0.141 0.359t-0.359 0.141h-2.625q-0.359 2.25-2.016 3.656t-4.312 1.719q2.609 2.781 7.172 8.375 0.219 0.25 0.063 0.531-0.125 0.281-0.453 0.281h-3.047q-0.25 0-0.391-0.187-4.781-5.734-7.781-8.922-0.141-0.141-0.141-0.344v-1.984q0-0.203 0.148-0.352t0.352-0.148h1.75q2.063 0 3.32-0.672t1.602-1.953h-6.672q-0.219 0-0.359-0.141t-0.141-0.359v-1.594q0-0.219 0.141-0.359t0.359-0.141h6.453q-0.891-1.766-4.188-1.766h-2.266q-0.203 0-0.352-0.148t-0.148-0.352v-2.078q0-0.219 0.141-0.359t0.359-0.141h13q0.219 0 0.359 0.141t0.141 0.359v1.594q0 0.219-0.141 0.359t-0.359 0.141h-3.641q0.734 0.953 1 2.25h2.672q0.219 0 0.359 0.141t0.141 0.359z"></path>
+        </svg-->
+                {{ totalDiscount | number: 0 }}
+              </div>
+              <div class="ord-amt" ng-show="flags.waitingCartDatails && flags.successCoupon"><div cv-text-loader class="textloading"></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="o-left-cont">
+              <p>Shipping</p>
+            </div>
+            <div class="o-right-cont">
+              <div class="ord-amt" ng-show="!flags.waitingCartDatails">
+                <span class="currency-code-summary" ng-bind-html="Currency(currencyCode)"></span>
+                {{ shippingAmount | number: 0 }}
+              </div>
+              <div class="ord-amt" ng-show="flags.waitingCartDatails"><div cv-text-loader class="textloading"></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="o-left-cont">
+              <p class="total pad-t-7">
+                <b>Total Payable</b>
+              </p>
+            </div>
+            <div class="o-right-cont">
+              <div class="ord-amt total" ng-show="!flags.waitingCartDatails">
+                <span class="currency-code-summary" ng-bind-html="Currency(currencyCode)"></span>
+                {{ grandTotal | number: 0 }}
+              </div>
+              <div class="ord-amt" ng-show="flags.waitingCartDatails"><div cv-text-loader class="textloading"></div></div>
+            </div>
+          </div>
+          <div class="col-xs-12 divider"></div>
+
+          <button class="btn col-xs-12 procd-to-checkout" ng-click="proceedToCheckout()" id="proccedToCheckoutBtn">
+            <span ng-show="!flags.proceedToCheckoutLoader">
+              <span class="margin-right-5px">Proceed to checkout</span>
+              <i class="sprite sprite-right-white-arrow vertical-middle margin-bottom-3px"></i>
+            </span>
+            <div ng-show="flags.proceedToCheckoutLoader" cv-loader class="small-loader"></div>
+          </button>
+        </div>
+      </div>
+      <!-- checkout right panel ends -->
+    </div>
+  </div>
+</div>

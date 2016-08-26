@@ -1,0 +1,141 @@
+<!-- order success start -->
+<div class="container nopadding" data-ng-init="onSuccessDetails()" style="padding-bottom:50px;">
+  <div class=" nopadding" order-thank-cont="">
+    <div class="col-xs-12  nopadding order-header">
+      <div class="thnku">
+        <div class="t-img"><img src="images/tick.png" width="100%"></div>
+        <div class="t-txt">Thank You</div>
+      </div>
+      <div class="succ-txt">Your order has been placed successfully.</div>
+      <div class="succ-sub-txt">Once the order is shipped you'll be intimated through Email & SMS with order tracking information.
+        <br>
+        <span ng-if="!isAndroid">You can track this order through
+        <a class="my-order-link" ng-href="{{NSHOST}}/sales/order/history">My Orders</a></span>
+        page.
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12" order-success-cont="">
+    <div class="col-xs-12  tailorvilla-cont" ng-if="tailorvillaDetails">
+      <div class="col-xs-7 col-md-9 nopadding">
+        <div class="congrats-head">{{tailorvillaDetails.offer_heading_title}}</div>
+        <div class="content">
+          {{tailorvillaDetails.offer_text}}
+          <!-- You have unlocked <strong>free stitching</strong> with <strong><a href="#"><span  class="rouge">tailorvilla</span></a></strong> for Beige Emproidered Chiffon Saree you just ordered -->
+        </div>
+        <a href="{{tailorvillaDetails.offer_button_url}}" target="_blank">
+          <div class="avail-offer-btn hidden-xs ">{{tailorvillaDetails.offer_button_title}}</div>
+        </a>
+      </div>
+      <div class="col-xs-5 col-md-3 nopadding ">
+        <div class="image-container">
+          <img ng-src="{{tailorvillaDetails.offer_image_url}}" style="width:100%;">
+        </div>
+      </div>
+      <div class="col-xs-12 nopadding hidden-lg">
+        <a href="{{tailorvillaDetails.offer_button_url}}" target="_blank">
+          <div class="avail-offer-btn ">{{tailorvillaDetails.offer_button_title}}</div>
+        </a>
+      </div>
+    </div>
+    <div class="col-xs-12 nopadding detls-cont">
+      <div class="dtl-txt">
+        Your Order Details</div>
+      <div class="ttl-no-ord">Order number:
+        {{ orderNo }}
+      </div>
+    </div>
+    <div class="col-xs-12 details-cont nopadding" ng-repeat="order in orderDetails">
+      <div class="col-xs-12 nopadding">
+        <div class="detail-text">{{ order.product_name }}</div>
+        <div class="detail-amt">
+          <span class="currency-code pull-left" ng-bind-html="Currency(currencyCode)"></span>
+          <strong>{{order.product_price | number : 0 }}</strong>
+        </div>
+      </div>
+      <div class="col-xs-12  nopadding detail-qty">
+        <strong>Quantity</strong>:
+        <strong>{{ order.product_qty | number : 0 }}</strong>
+        <strong ng-if="order.variants" class="pipe">|</strong>
+        <strong ng-if="order.variants" ng-bind-html="getProductMetaData(order.variants, { 'key': 'Size', 'name': 'Size'}, { 'key': 'Color', 'name': 'Color'} )"></strong>
+      </div>
+    </div>
+
+    <div class="col-xs-12 nopadding details-cont">
+      <div class="col-xs-12 nopadding">
+        <div class="detail-text">Sub Total
+        </div>
+        <div class="detail-amt">
+          <span class="currency-code pull-left" ng-bind-html="Currency(currencyCode)"></span>
+          {{ order.sub_total | number : 0 }}</div>
+
+      </div>
+      <div class="col-xs-12  nopadding m-t-8px" ng-if="order.coupon_code">
+        <div class="detail-text ">
+          Coupon Applied (CRAFTSLOVE)</div>
+        <div class="detail-amt">
+          -
+          <span class="currency-code pull-left" ng-bind-html="Currency(currencyCode)"></span>
+          {{ order.totol_discount | number : 0 }}
+        </div>
+
+      </div>
+      <div class="col-xs-12  nopadding m-t-8px">
+        <div class="detail-text ltr-spcng">Shipping</div>
+        <div class="detail-amt">
+          <span class="currency-code pull-left" ng-bind-html="Currency(currencyCode)"></span>
+          {{ order.shipping_amount | number : 0 }}</div>
+
+      </div>
+      <div class="col-xs-12  nopadding m-t-8px m-b-10px">
+        <div class="detail-text color-black">
+          <strong>Total Payable</strong>
+        </div>
+        <div class="detail-amt color-black">
+          <span class="currency-code pull-left" ng-bind-html="Currency(currencyCode)"></span>
+          <strong>
+            {{ order.grand_total | number : 0 }}
+          </strong>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12  nopadding details-cont p-t-b-5px">
+      <div class="col-xs-12  nopadding">
+        <div class="detail-text  ln-hgt-2-6 ltr-spcng">SHIPPING DETAILS</div>
+      </div>
+      <div class="col-xs-12  nopadding">
+        <div class="detail-text  font16 font14-xs  ln-hgt-2-6 gryeish-brown">
+          <strong>{{shippingDetails.firstname}}
+            {{shippingDetails.lastname}}</strong>
+        </div>
+      </div>
+      <div class="col-xs-12  nopadding">
+        <div class="detail-text  font16 font14-xs ">{{shippingDetails.company}},
+          {{shippingDetails.street}},
+          {{shippingDetails.city}},
+          {{shippingDetails.region}}
+          -
+          {{order.postcode}}</div>
+      </div>
+      <div class="col-xs-12  nopadding">
+        <div class="detail-text  font16 font14-xs  ln-hgt-2-6">{{ shippingDetails.telephone }}</div>
+      </div>
+    </div>
+
+    <div class="col-xs-12  nopadding shpng-contn-container" ng-if="!isAndroid">
+      <a class="shpng-contn" ng-href="{{NSHOST}}">CONTINUE SHOPPING</a>
+    </div>
+    <div class="col-xs-12  nopadding" ng-if="isAndroid">
+      <a class="shpng-contn" ng-click="showHomeScreen()">CONTINUE SHOPPING</a>
+    </div>
+
+    <div class="overlay-out-stock" ng-show="waitingOrderDatails">
+      <div cv-loader class="loader-cartitem"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  if (typeof _satellite != "undefined") {
+    _satellite.track("order-page-load");
+  }
+</script>

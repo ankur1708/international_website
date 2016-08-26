@@ -1,0 +1,68 @@
+/*!
+ * bootstrap-vertical-tabs - v1.2.1
+ * https://dbtek.github.io/bootstrap-vertical-tabs
+ * 2014-11-07
+ * Copyright (c) 2014 İsmail Demirbilek
+ * License: MIT
+ */
+.tabs-left {
+  border-bottom: none;
+  padding-top: 0px;
+}
+.tabs-left>li {
+  float: left;
+  margin-bottom: 0px;
+  width: 100%;
+  border-left: solid 1px #ededed;
+  border-right: solid 1px #ededed;
+  border-bottom: solid 1px #ededed;
+}
+.tabs-left>li>a {
+  border-radius: 0;
+  margin-right: 0;
+  display:block;
+  border: none;
+  background: #fcfcfc;
+  color: #747474;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 25px 20px;
+}
+.tabs-left>li>a:focus {
+  outline: none;
+  outline-offset:0;
+  background: none;
+ }
+ .tabs-left>li>a:hover {
+  background: none;
+ }
+.tabs-left>li.active {
+  text-shadow: none;
+  color: #4c4c4c;
+  border-right: solid 1px transparent;
+}
+.tabs-left>li.active>a {
+  padding: 25px 20px;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  border-left: solid 5px #6da40e !important;
+}
+.tabs-left>li.active>a:hover {
+  padding: 25px 20px;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  border-left: solid 5px #6da40e !important;
+}
+.tabs-left>li a + div { display: none; }
+.tabs-left>li.active > a + div { border-left: solid 5px #6da40e; padding: 0px 20px 15px 20px; display: block; }
+/*==============================
+MEDIA QUERI
+============================== */
+/* Small devices (320 to 768) */
+@media (max-width: 768px) {
+.tabs-left > li > a { padding: 20px; }
+.tabs-left>li.active { border-right: solid 1px #ededed !important; }
+.tabs-left>li.active>a, .tabs-left>li.active>a:hover { padding: 20px 20px 8px 20px; }
+}

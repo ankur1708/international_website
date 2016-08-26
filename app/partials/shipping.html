@@ -1,0 +1,165 @@
+<div data-overlay class="hide">&nbsp;</div>
+<div class="container-fluid nopadding">
+  <div class="container">
+    <!--// login Flow Start -->
+    <div class="loginProcessContainer container-fluid">
+      <div role="loginFlow" class="col-xs-12 nopadding">
+        <div class="circleBox LoginIcon">
+          <span>
+            <i class="sprite sprite-user-maroon-bg"></i>
+          </span>
+          <span class="rougeColor">Login</span>
+        </div>
+        <div class="Progressliner Firstliner" ng-class="{'rougeBack': currentView() !== 'Login', 'white-nine': currentView() === 'Login'}"></div>
+        <div class="circleBox ShippingIcon ">
+          <span>
+            <i class="sprite" ng-class="{'sprite-carrier-grey-bg': currentView() === 'Login', 'sprite-carrier-maroon-bg': currentView() !== 'Login'}"></i>
+          </span>
+          <span ng-class="{'rougeColor': currentView() !== 'Login', 'warm-greyColor': currentView() === 'Login'}">Shipping</span>
+        </div>
+        <div class="Progressliner Secoundliner" ng-class="{'rougeBack': currentView() === 'Payment', 'white-nine': currentView() !== 'Payment'}"></div>
+        <div class="circleBox PaymentIcon ">
+          <span>
+            <i class="sprite" ng-class="{'sprite-rupee-grey-bg': currentView() !== 'Payment', 'sprite-rupee-maroon-bg': currentView() === 'Payment'}"></i>
+          </span>
+          <span ng-class="{'rougeColor': currentView() === 'Payment', 'warm-greyColor': currentView() !== 'Payment'}">Payment</span>
+        </div>
+      </div>
+    </div>
+    <!--// login Flow End -->
+  </div>
+</div>
+<div class="container-fluid nopadding">
+  <div class="container">
+    <!--// login Container Start -->
+    <div class="col-xs-12 nopadding shippingContainer" ng-if="addresses.length > 0" ng-class="{'hidden-xs': flags.showAddNewAddressMobile }">
+      <h4 role="headding">SELECT SHIPPING ADDRESS</h4>
+      <div class="row">
+        <div
+          ng-if="flags.isBillingAddressSame || shippingID === address.entity_id"
+          cv-address-box
+          ng-repeat="address in addresses"
+          address="address"
+          oncardclicked="selectShippingAddress(address.entity_id)"
+          billingid="billingID"
+          shippingid="shippingID"
+          oneditclicked="showEditAddressPopup(address)"
+          shippingbillingflag="flags.isBillingAddressSame"
+          onshippingbillingflagchange="billingShippingCheckboxToggled()"></div>
+
+        <div class="addressEditContainer" ng-show="flags.showEditAddressPopup">
+          <div class="col-xs-12 new-address">
+            <div class="col-xs-12  nopadding">
+              <span role="close" ng-click="hideEditAddressPopup()">
+                <a>
+                  <i class="sprite sprite-grey-cross" title="" style="cursor:pointer;"></i>
+                </a>
+              </span>
+              <h4 role="headding">
+                <a href="#new-address">Edit Address</a>
+              </h4>
+              <div cv-address-form address="activeAddress" countries="countries" onsubmitclicked="editAddress(activeAddress)" oncancelclicked="hideEditAddressPopup()" showeditsubmit="true" loaderflag="flags.editSaveAndContinueLoader"></div>
+            </div>
+          </div>
+        </div>
+        <div class="checkbox col-xs-12 margin-top0 hidden-xs">
+          <label>
+            <input type="checkbox" id="DGuest" ng-model="flags.isBillingAddressSame" ng-change="billingShippingCheckboxToggled()">
+            <span for="Guest"></span>
+            This is also my Billing Address
+          </label>
+        </div>
+        <div class="col-xs-12 " style="padding-bottom:20px;">
+          <div class="alert alert-danger fade in" ng-show="!flags.bothAddressSelected">
+            <a href="javascript:void(0)" class="close" ng-click="flags.bothAddressSelected=true">×</a>
+            Please select billing address or add new billing address.
+          </div>
+          <div class="col-xs-12 nopadding  hidden-xs" ng-if="flags.isBillingAddressSame">
+            <button class="btn btn-newStyle btn-newStyleActive " style="width:30%;" ng-click="proceed();">
+              <span ng-show="!deliverToAddress">
+                DELIVER TO THIS ADDRESS
+              </span>
+              <div ng-show="deliverToAddress" cv-loader class="small-loader"></div>
+            </button>
+          </div>
+        </div>
+        <div ng-if="!flags.isBillingAddressSame">
+          <div class="col-xs-12">
+            <h4 role="headding">SELECT BILLING ADDRESS
+            </h4>
+          </div>
+          <div
+            ng-if="!flags.isBillingAddressSame && shippingID !== address.entity_id"
+            cv-address-box
+            ng-repeat="address in addresses"
+            address="address"
+            oncardclicked="selectBillingAddress(address.entity_id)"
+            billingid="billingID"
+            shippingid="shippingID"
+            oneditclicked="showEditAddressPopup(address)"></div>
+        </div>
+        <div class="col-xs-12" style="padding-bottom:20px;" ng-if="!flags.isBillingAddressSame">
+          <div class="col-xs-12 nopadding hidden-xs">
+            <button class="btn btn-newStyle btn-newStyleActive " type="button" style="width:30%;" ng-click="proceed()">
+              <span ng-show="!proceedToPaymentLoader">PROCEED TO PAYMENT</span>
+              <div ng-show="proceedToPaymentLoader" cv-loader class="small-loader"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 nopadding add-new-shipping">
+      <h4 class="M-add-new-address" role="headding" ng-class="{'hidden-xs': flags.showAddNewAddressMobile }">
+        <a ng-click="showAddNewAddressMobile()">ADD NEW ADDRESS
+          <span>
+            <i class="sprite sprite-right-arrow"></i>
+          </span>
+        </a>
+      </h4>
+      <h4 class="hidden-lg" role="headding" ng-class="{'hidden-xs': !flags.showAddNewAddressMobile }">
+        <a ng-click="showAddNewAddressMobile()">ADD SHIPPING ADDRESS
+        </a>
+        <span>
+          <a ng-click="showAddNewAddressMobile()" style="font-size:12px;color:#971937;" ng-hide="flags.noresponse">Back to Saved Addresses</a>
+        </span>
+      </h4>
+      <div class="row" ng-class="{'hidden-xs': !flags.showAddNewAddressMobile }">
+        <div class="col-xs-12 nopad-xs">
+          <div class="col-xs-12 new-address">
+            <div class="col-xs-12 col-sm-7 nopadding">
+              <div cv-address-form countries="countries" formname="forms.newShippingAddress" onsubmitclicked="addNewAddress('shipping')" showaddsubmit="flags.isNewBillingAddressSame" address="newShippingAddress" loaderflag="flags.shippingSaveAndContinueLoader"></div>
+              <div class="form-group nopadding col-xs-12" ng-if="flags.isNewBillingAddressSame">
+                <div class="checkbox col-xs-12 nopadding margin0">
+                  <label>
+                    <input type="checkbox" id="Guest" ng-model="flags.isNewBillingAddressSame">
+                    <span for="Guest"></span>
+                    This is also my Billing Address
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div ng-if="!flags.isNewBillingAddressSame">
+              <hr class="line-divider"/>
+              <div class="col-xs-12 nopadding">
+                <h4 role="headding">ADD BILLING ADDRESS
+                </h4>
+              </div>
+              <div class="col-xs-12 col-sm-7 nopadding">
+                <div cv-address-form countries="countries" formname="forms.newBillingAddress" onsubmitclicked="addNewAddress('billing')" showaddsubmit="!flags.isNewBillingAddressSame" address="newBillingAddress" loaderflag="flags.billingSaveAndContinueLoader"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 " style="padding-bottom:20px;" ng-if="!mform && !flags.showAddNewAddressMobile">
+    <div class="col-xs-12 nopadding hidden-lg">
+      <button class="btn col-xs-12 procd-to-checkout" type="button" ng-click="proceed()">
+        <span ng-show="!proceedToPaymentLoader">PROCEED TO PAYMENT</span>
+        <div ng-show="proceedToPaymentLoader" cv-loader class="small-loader"></div>
+      </button>
+    </div>
+  </div>
+</div>
+<div data-overlay ng-show="flags.showEditAddressPopup">&nbsp;</div>
